@@ -5,6 +5,7 @@ build
 dist
 .DS_Store
 .fusebox
+.babel_cache
 filters
 package-lock.json
 temp-electron-builder.json

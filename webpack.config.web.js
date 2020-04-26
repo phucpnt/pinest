@@ -14,11 +14,17 @@ const webConfig = getConfig(getBaseConfig('web'), {
     hot: true,
     inline: true,
     disableHostCheck: true,
+
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/_invest.html/, to: '/_invest.html' },
+      ]
+    }
   },
 
   externals: { electron: 'require("electron")' },
 });
 
-applyEntries('web', webConfig, ['settings', 'history', 'newtab', 'bookmarks']);
+applyEntries('web', webConfig, ['_invest', 'settings', 'history', 'newtab', 'bookmarks']);
 
 module.exports = webConfig;

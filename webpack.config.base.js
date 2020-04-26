@@ -46,8 +46,11 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(png|gif|jpg|woff2|ttf|svg)$/,
-        include: INCLUDE,
+        test: /\.(png|gif|jpg|woff2|woff|ttf|svg|eot)$/,
+        include: [
+          INCLUDE
+          , join(__dirname, '../..', 'node_modules')
+        ],
         use: [
           {
             loader: 'file-loader',
@@ -74,6 +77,31 @@ const config = {
 
         include: INCLUDE,
       },
+      {
+        test: /\.js|jsx$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [['react-app']],
+              // cacheDirectory: '.babel_cache',
+              babelrc: false,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+        ],
+      },
       /*{
         test: /\.node$/,
         loader: 'awesome-node-loader',
@@ -94,6 +122,9 @@ const config = {
     extensions: ['.js', '.jsx', '.tsx', '.ts', '.json'],
     alias: {
       '~': INCLUDE,
+      'invest/src': join(__dirname, '../../src'),
+      'react': join(__dirname, 'node_modules/react'),
+      'react-dom': join(__dirname, 'node_modules/react-dom'),
     },
   },
 
@@ -147,6 +178,7 @@ const getHtml = (scope, name, entries = []) => {
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
+    
     excludeChunks,
   });
 };
