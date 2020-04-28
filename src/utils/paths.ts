@@ -14,3 +14,7 @@ export const getPath = (...relativePaths: string[]) => {
 
   return resolve(path, ...relativePaths).replace(/\\/g, '/');
 };
+
+export const getInvestPath = (...relativePaths: string[]) => {
+  return resolve(__dirname, '../../..', ...relativePaths);
+}
