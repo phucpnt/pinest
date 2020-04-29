@@ -49,6 +49,7 @@ export class View {
         nativeWindowOpen: true,
         webSecurity: true,
         javascript: true,
+        webviewTag: url.startsWith(NEWTAB_URL),
       },
     });
 
