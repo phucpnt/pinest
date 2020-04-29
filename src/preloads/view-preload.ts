@@ -114,6 +114,12 @@ if (window.location.host === 'chrome.google.com') {
   injectChromeWebstoreInstallButton();
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+  const script = document.createElement('script');
+  script.src ="http://localhost:10786/pi-view-preload.js";
+  document.head.appendChild(script);
+});
+
 const settings = ipcRenderer.sendSync('get-settings-sync');
 if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||

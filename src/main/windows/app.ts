@@ -2,7 +2,7 @@ import { BrowserWindow, app, dialog } from 'electron';
 import { writeFileSync, promises } from 'fs';
 import { resolve, join } from 'path';
 
-import { getPath, getInvestPath } from '~/utils';
+import { getPath } from '~/utils';
 import { runMessagingService } from '../services';
 import { Application } from '../application';
 import {
@@ -68,16 +68,13 @@ export class AppWindow {
         contextIsolation: false,
         javascript: true,
         enableRemoteModule: true,
-        webviewTag: true,
       },
-      icon: process.env.NODE_ENV === 'development' ? getInvestPath('invest-desktop.png') : resolve(
+      icon: resolve(
         app.getAppPath(),
         `static/${isNightly ? 'nightly-icons' : 'icons'}/icon.png`,
       ),
       show: false,
     });
-
-    app.dock.setIcon(getInvestPath('invest-desktop.png'));
 
     this.incognito = incognito;
 

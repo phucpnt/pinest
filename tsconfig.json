@@ -17,8 +17,7 @@
     "experimentalDecorators": true,
     "baseUrl": "./",
     "paths": {
-      "~/*": ["./src/*"],
-      "invest/src/*": ["../../src/*"]
+      "~/*": ["./src/*"]
     }
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"]

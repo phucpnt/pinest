@@ -1,6 +1,6 @@
 {
   "appId": "org.wexond.wexond",
-  "productName": "Wexond",
+  "productName": "Pi",
   "nsis": {
     "include": "static/installer.nsh"
   },
@@ -42,7 +42,7 @@
   "fileAssociations": [
     {
       "name": "Document",
-      "description": "Wexond",
+      "description": "Pi",
       "role": "Viewer",
       "ext": "html"
     }
