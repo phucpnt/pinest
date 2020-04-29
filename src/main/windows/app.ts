@@ -68,6 +68,7 @@ export class AppWindow {
         contextIsolation: false,
         javascript: true,
         enableRemoteModule: true,
+        webviewTag: true,
       },
       icon: process.env.NODE_ENV === 'development' ? getInvestPath('invest-desktop.png') : resolve(
         app.getAppPath(),
