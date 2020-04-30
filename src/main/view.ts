@@ -37,19 +37,20 @@ export class View {
   private lastUrl = '';
 
   public constructor(window: AppWindow, url: string, incognito: boolean) {
+    const isSpecialPage = url.startsWith(NEWTAB_URL);
     this.browserView = new BrowserView({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
-        nodeIntegration: url.startsWith(NEWTAB_URL),
-        contextIsolation: !url.startsWith(NEWTAB_URL),
-        sandbox: !url.startsWith(NEWTAB_URL),
-        enableRemoteModule: !url.startsWith(NEWTAB_URL),
+        nodeIntegration: isSpecialPage,
+        contextIsolation: !isSpecialPage,
+        sandbox: !isSpecialPage,
+        enableRemoteModule: isSpecialPage,
         partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
         nativeWindowOpen: true,
-        webSecurity: !url.startsWith(NEWTAB_URL),
+        webSecurity: !isSpecialPage,
         javascript: true,
-        webviewTag: url.startsWith(NEWTAB_URL),
+        webviewTag: isSpecialPage,
       },
     });
 
