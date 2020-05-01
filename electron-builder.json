@@ -1,5 +1,5 @@
 {
-  "appId": "org.wexond.wexond",
+  "appId": "org.phuc.pi",
   "productName": "Pi",
   "nsis": {
     "include": "static/installer.nsh"
