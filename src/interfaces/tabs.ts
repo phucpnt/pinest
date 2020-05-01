@@ -8,6 +8,4 @@ export type TabEvent =
   | 'pinned'
   | 'credentials'
   | 'blocked-ad'
-  | 'zoom-updated'
-  | 'media-playing'
-  | 'media-paused';
+  | 'zoom-updated';

@@ -17,6 +17,7 @@ import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { Switch } from '~/renderer/components/Switch';
 import {
   ICON_FIRE,
+  ICON_NIGHT,
   ICON_TOPMOST,
   ICON_TAB,
   ICON_WINDOW,
@@ -63,20 +64,12 @@ const onIncognitoClick = () => {
   ipcRenderer.send('create-window', true);
 };
 
-const addNewTab = (url: string) => {
+const goToWebUIPage = (name: string) => () => {
   ipcRenderer.send(`add-tab-${store.windowId}`, {
-    url,
+    url: `${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`,
     active: true,
   });
   store.hide();
-};
-
-const goToWebUIPage = (name: string) => () => {
-  addNewTab(`${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`);
-};
-
-const goToURL = (url: string) => () => {
-  addNewTab(url);
 };
 
 const onUpdateClick = () => {
@@ -134,7 +127,7 @@ export const QuickMenu = observer(() => {
             <Icon icon={ICON_BOOKMARKS} />
             <MenuItemTitle>Bookmarks</MenuItemTitle>
           </MenuItem>
-          <MenuItem disabled onClick={goToWebUIPage('downloads')}>
+          <MenuItem onClick={goToWebUIPage('downloads')}>
             <Icon icon={ICON_DOWNLOAD} />
             <MenuItemTitle>Downloads</MenuItemTitle>
           </MenuItem>
@@ -143,17 +136,12 @@ export const QuickMenu = observer(() => {
             <Icon icon={ICON_SETTINGS} />
             <MenuItemTitle>Settings</MenuItemTitle>
           </MenuItem>
-          {/* TODO: <MenuItem onClick={goToWebUIPage('extensions')}> */}
-          <MenuItem
-            onClick={goToURL(
-              'https://chrome.google.com/webstore/category/extensions',
-            )}
-          >
+          <MenuItem onClick={goToWebUIPage('extensions')}>
             <Icon icon={ICON_EXTENSIONS} />
             <MenuItemTitle>Extensions</MenuItemTitle>
           </MenuItem>
           <Line />
-          <MenuItem disabled>
+          <MenuItem>
             <Icon icon={ICON_FIND} />
             <MenuItemTitle>Find in page</MenuItemTitle>
             <Shortcut>Ctrl+F</Shortcut>

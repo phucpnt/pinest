@@ -78,11 +78,6 @@ export class Settings extends EventEmitter {
       this.object.theme = nativeTheme.shouldUseDarkColors
         ? 'wexond-dark'
         : 'wexond-light';
-
-      nativeTheme.themeSource = 'system';
-    } else {
-      nativeTheme.themeSource =
-        this.object.theme === 'wexond-dark' ? 'dark' : 'light';
     }
 
     for (const window of Application.instance.windows.list) {
@@ -92,7 +87,7 @@ export class Settings extends EventEmitter {
         dialog.send('update-settings', this.object);
       });
 
-      window.viewManager.views.forEach(async (v) => {
+      window.viewManager.views.forEach((v) => {
         if (v.webContents.getURL().startsWith(WEBUI_BASE_URL)) {
           v.webContents.send('update-settings', this.object);
         }

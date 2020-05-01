@@ -138,13 +138,9 @@ export class Store {
   public isBookmarked = false;
 
   @observable
-  public zoomFactor = 1;
-
-  @observable
   public dialogsVisibility: { [key: string]: boolean } = {
     menu: false,
     'add-bookmark': false,
-    'zoom': false,
     'extension-popup': false,
     'downloads-dialog': false,
   };
