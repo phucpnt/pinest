@@ -3,13 +3,7 @@ import { VIEW_Y_OFFSET } from '~/constants/design';
 import { View } from './view';
 import { AppWindow } from './windows';
 import { WEBUI_BASE_URL } from '~/constants/files';
-
-import {
-  ZOOM_FACTOR_MIN,
-  ZOOM_FACTOR_MAX,
-  ZOOM_FACTOR_INCREMENT,
-} from '~/constants/web-contents';
-import { extensions } from 'electron-extensions';
+import { Application } from './application';
 
 export class ViewManager {
   public views = new Map<number, View>();
@@ -53,7 +47,7 @@ export class ViewManager {
     });
 
     ipcMain.handle(`view-select-${id}`, (e, id: number, focus: boolean) => {
-      extensions.tabs.activate(id, focus);
+      this.select(id, focus);
     });
 
     ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
@@ -72,37 +66,6 @@ export class ViewManager {
 
     ipcMain.on(`browserview-clear-${id}`, () => {
       this.clear();
-    });
-
-    ipcMain.on('change-zoom', (e, zoomDirection) => {
-      const newZoomFactor =
-        this.selected.webContents.zoomFactor +
-        (zoomDirection === 'in'
-          ? ZOOM_FACTOR_INCREMENT
-          : -ZOOM_FACTOR_INCREMENT);
-
-      if (
-        newZoomFactor <= ZOOM_FACTOR_MAX &&
-        newZoomFactor >= ZOOM_FACTOR_MIN
-      ) {
-        this.selected.webContents.zoomFactor = newZoomFactor;
-        this.selected.emitEvent(
-          'zoom-updated',
-          this.selected.webContents.zoomFactor,
-        );
-      } else {
-        e.preventDefault();
-      }
-      this.emitZoomUpdate();
-    });
-
-    ipcMain.on('reset-zoom', (e) => {
-      this.selected.webContents.zoomFactor = 1;
-      this.selected.emitEvent(
-        'zoom-updated',
-        this.selected.webContents.zoomFactor,
-      );
-      this.emitZoomUpdate();
     });
   }
 
@@ -127,8 +90,6 @@ export class ViewManager {
     const { id } = view;
 
     this.views.set(id, view);
-
-    extensions.tabs.observe(webContents);
 
     webContents.once('destroyed', () => {
       this.views.delete(id);
@@ -189,11 +150,15 @@ export class ViewManager {
     this.window.updateTitle();
     view.updateBookmark();
 
+    if (this.incognito) {
+      Application.instance.sessions.viewIncognito.activeTab = id;
+    } else {
+      Application.instance.sessions.view.activeTab = id;
+    }
+
     this.fixBounds();
 
     view.updateNavigationState();
-
-    this.emitZoomUpdate(false);
   }
 
   public fixBounds() {
@@ -223,17 +188,5 @@ export class ViewManager {
       this.window.win.removeBrowserView(view.browserView);
       view.destroy();
     }
-  }
-
-  public emitZoomUpdate(showDialog: boolean = true) {
-    this.window.dialogs.zoomDialog.send(
-      'zoom-factor-updated',
-      this.selected.webContents.zoomFactor
-    );
-    this.window.webContents.send(
-      'zoom-factor-updated',
-      this.selected.webContents.zoomFactor,
-      showDialog,
-    );
   }
 }

@@ -1,15 +1,12 @@
 import { existsSync, promises as fs } from 'fs';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 import fetch from 'node-fetch';
 
 import { ElectronBlocker, Request } from '@cliqz/adblocker-electron';
 import { getPath } from '~/utils';
 import { Application } from '../application';
-import { ipcMain } from 'electron';
 
 export let engine: ElectronBlocker;
-
-const PRELOAD_PATH = join(__dirname, './preload.js');
 
 const loadFilters = async () => {
   const path = resolve(getPath('adblock/cache.dat'));
@@ -53,19 +50,13 @@ const loadFilters = async () => {
 };
 
 const emitBlockedEvent = (request: Request) => {
-  const win = Application.instance.windows.findByBrowserView(request.tabId);
-  win.viewManager.views.get(request.tabId).emitEvent('blocked-ad');
+  for (const window of Application.instance.windows.list) {
+    window.viewManager.views.get(request.tabId).emitEvent('blocked-ad');
+  }
 };
 
 let adblockRunning = false;
 let adblockInitialized = false;
-
-interface IAdblockInfo {
-  headersReceivedId?: number;
-  beforeRequestId?: number;
-}
-
-const sessionAdblockInfoMap: Map<Electron.Session, IAdblockInfo> = new Map();
 
 export const runAdblockService = async (ses: any) => {
   if (!adblockInitialized) {
@@ -81,56 +72,18 @@ export const runAdblockService = async (ses: any) => {
 
   adblockRunning = true;
 
-  const info = sessionAdblockInfoMap.get(ses) || {};
-
-  if (!info.headersReceivedId) {
-    info.headersReceivedId = ses.webRequest.addListener(
-      'onHeadersReceived',
-      { urls: ['<all_urls>'] },
-      (engine as any).onHeadersReceived,
-      { order: 0 },
-    ).id;
-  }
-
-  if (!info.beforeRequestId) {
-    info.beforeRequestId = ses.webRequest.addListener(
-      'onBeforeRequest',
-      { urls: ['<all_urls>'] },
-      (engine as any).onBeforeRequest,
-      { order: 0 },
-    ).id;
-  }
-
-  sessionAdblockInfoMap.set(ses, info);
-
-  ipcMain.on('get-cosmetic-filters', (engine as any).onGetCosmeticFilters);
-  ipcMain.on(
-    'is-mutation-observer-enabled',
-    (engine as any).onIsMutationObserverEnabled,
-  );
-  ses.setPreloads(ses.getPreloads().concat([PRELOAD_PATH]));
+  engine.enableBlockingInSession(ses);
 
   engine.on('request-blocked', emitBlockedEvent);
   engine.on('request-redirected', emitBlockedEvent);
 };
 
 export const stopAdblockService = (ses: any) => {
-  if (!ses.webRequest.removeListener) return;
   if (!adblockRunning) return;
 
   adblockRunning = false;
 
-  const info = sessionAdblockInfoMap.get(ses) || {};
-
-  if (info.beforeRequestId) {
-    ses.webRequest.removeListener('onBeforeRequest', info.beforeRequestId);
-    info.beforeRequestId = null;
+  if (engine) {
+    engine.disableBlockingInSession(ses);
   }
-
-  if (info.headersReceivedId) {
-    ses.webRequest.removeListener('onHeadersReceived', info.headersReceivedId);
-    info.headersReceivedId = null;
-  }
-
-  ses.setPreloads(ses.getPreloads().filter((p: string) => p !== PRELOAD_PATH));
 };

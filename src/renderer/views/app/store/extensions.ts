@@ -7,6 +7,7 @@ import { IBrowserAction } from '../models';
 import { promises } from 'fs';
 import { ipcRenderer } from 'electron';
 import store from '.';
+import { Electron10Extension } from '~/interfaces';
 
 export class ExtensionsStore {
   @observable
@@ -35,8 +36,8 @@ export class ExtensionsStore {
     this.browserActions.push(tabBrowserAction);
   }
 
-  public async loadExtension(extension: Electron.Extension) {
-    if (this.defaultBrowserActions.find((x) => x.extensionId === extension.id))
+  public async loadExtension(extension: Electron10Extension) {
+    if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
       return;
 
     if (extension.manifest.browser_action) {
@@ -54,9 +55,7 @@ export class ExtensionsStore {
         join(extension.path, icon1 as string),
       );
 
-      if (
-        this.defaultBrowserActions.find((x) => x.extensionId === extension.id)
-      )
+      if (this.defaultBrowserActions.find(x => x.extensionId === extension.id))
         return;
 
       const icon = window.URL.createObjectURL(new Blob([data]));
@@ -76,10 +75,10 @@ export class ExtensionsStore {
   }
 
   public async load() {
-    const extensions: Electron.Extension[] = await ipcRenderer.invoke(
+    const extensions: Electron10Extension[] = await ipcRenderer.invoke(
       'get-extensions',
     );
 
-    await Promise.all(extensions.map((x) => this.loadExtension(x)));
+    await Promise.all(extensions.map(x => this.loadExtension(x)));
   }
 }

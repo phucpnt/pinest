@@ -4,7 +4,6 @@
   "nsis": {
     "include": "static/installer.nsh"
   },
-  "generateUpdatesFilesForAllChannels": true,
   "asar": true,
   "directories": {
     "output": "dist",

@@ -17,7 +17,6 @@ import {
   TabGroupDialog,
   DownloadsDialog,
   AddBookmarkDialog,
-  ZoomDialog,
   Dialog,
   ExtensionPopup,
 } from '../dialogs';
@@ -33,7 +32,6 @@ interface IDialogs {
   findDialog?: FindDialog;
   downloadsDialog?: DownloadsDialog;
   addBookmarkDialog?: AddBookmarkDialog;
-  zoomDialog?: ZoomDialog;
 
   permissionsDialog?: PermissionsDialog;
   authDialog?: AuthDialog;
@@ -90,7 +88,6 @@ export class AppWindow {
       this.dialogs.findDialog = new FindDialog(this);
       this.dialogs.downloadsDialog = new DownloadsDialog(this);
       this.dialogs.addBookmarkDialog = new AddBookmarkDialog(this);
-      this.dialogs.zoomDialog = new ZoomDialog(this);
 
       this.dialogs.permissionsDialog = new PermissionsDialog(this);
       this.dialogs.authDialog = new AuthDialog(this);

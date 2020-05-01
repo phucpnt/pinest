@@ -94,12 +94,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.addBookmarkDialog.show();
   });
 
-  ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {
-    appWindow.dialogs.zoomDialog.left = left;
-    appWindow.dialogs.zoomDialog.top = top;
-    appWindow.dialogs.zoomDialog.show();
-  });
-
   ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
     appWindow.send(`edit-tabgroup`, tabGroup);
   });
@@ -107,7 +101,8 @@ export const runMessagingService = (appWindow: AppWindow) => {
   ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;
   });
-
+  /*
+  TODO:
   ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
     const items = await getFormFillMenuItems(name, value);
 
@@ -241,5 +236,5 @@ export const runMessagingService = (appWindow: AppWindow) => {
       const password = await getPassword('wexond', account);
       e.sender.send(id, password);
     },
-  );
+  );*/
 };

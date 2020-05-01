@@ -50,7 +50,6 @@ applyEntries('app', appConfig, [
   'tabgroup',
   'downloads-dialog',
   'add-bookmark',
-  'zoom',
 ]);
 
 extPopupConfig.entry['extension-popup'] = [
