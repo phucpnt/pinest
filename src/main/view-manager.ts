@@ -12,9 +12,10 @@ import {
 import { extensions } from 'electron-extensions';
 import { EventEmitter } from 'events';
 import { Application } from './application';
+import { ViewPi } from './view-pi';
 
 export class ViewManager extends EventEmitter {
-  public views = new Map<number, View>();
+  public views = new Map<number, View | ViewPi>();
   public selectedId = 0;
   public _fullscreen = false;
 
@@ -131,7 +132,12 @@ export class ViewManager extends EventEmitter {
     isNext = false,
     sendMessage = true,
   ) {
-    const view = new View(this.window, details.url, this.incognito);
+    let view = null;
+    if (ViewPi.isPiPage(details.url)) {
+      view = new ViewPi(this.window, details.url, this.incognito);
+    } else {
+      view = new View(this.window, details.url, this.incognito);
+    }
 
     const { webContents } = view.browserView;
     const { id } = view;

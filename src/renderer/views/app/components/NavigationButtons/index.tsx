@@ -10,6 +10,7 @@ import {
   ICON_BACK,
   ICON_REFRESH,
 } from '~/renderer/constants/icons';
+const INVEST_LOGO = require('~/renderer/resources/icons/invest-logo.svg');
 
 const onBackClick = () => {
   store.tabs.selectedTab.callViewMethod('goBack');
@@ -56,6 +57,9 @@ export const NavigationButtons = observer(() => {
         icon={loading ? ICON_CLOSE : ICON_REFRESH}
         onClick={onRefreshClick}
       />
+      <ToolbarButton icon={INVEST_LOGO} size={20} style={{marginLeft: 6}} onClick={() => {
+        store.tabs.addTab({url: 'http://localhost:10786/_invest.html', active: true});
+      }} />
     </StyledContainer>
   );
 });
