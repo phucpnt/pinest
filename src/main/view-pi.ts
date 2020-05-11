@@ -50,7 +50,7 @@ export class ViewPi {
 
   public static isPiPage(url: string) {
     return (
-      url.startsWith('http://localhost:10786') && url.indexOf('onedrive') === -1
+      url.startsWith('https://localhost:10786') && url.indexOf('onedrive') === -1
     );
   }
 

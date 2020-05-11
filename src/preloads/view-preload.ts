@@ -227,8 +227,9 @@ if (window.location.href.startsWith(WEBUI_BASE_URL)) {
   });
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   let script = document.createElement('script');
-  script.src = 'http://localhost:10786/preload.js';
+  script.type="text/javascript";
+  script.src = 'https://localhost:10786/preload.js';
   document.head.appendChild(script);
 });
