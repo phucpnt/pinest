@@ -91,6 +91,14 @@ export class ViewPi {
       },
     );
 
+    this.webContents.session.webRequest.onHeadersReceived(
+      (details, callback) => {
+        const responseHeaders = details.responseHeaders;
+        responseHeaders["Access-Control-Allow-Origin"] = ["https://localhost:10786"];
+        callback({ responseHeaders: responseHeaders });
+      },
+    );
+
     ipcMain.handle(`get-error-url-${this.id}`, async (e) => {
       return this.errorURL;
     });
