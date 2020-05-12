@@ -58,7 +58,7 @@ export const NavigationButtons = observer(() => {
         onClick={onRefreshClick}
       />
       <ToolbarButton icon={INVEST_LOGO} size={20} style={{marginLeft: 6}} onClick={() => {
-        store.tabs.addTab({url: 'http://localhost:10786/_invest.html', active: true});
+        store.tabs.addTab({url: 'https://localhost:10786/_invest.html', active: true});
       }} />
     </StyledContainer>
   );
