@@ -94,7 +94,8 @@ export class ViewPi {
     this.webContents.session.webRequest.onHeadersReceived(
       (details, callback) => {
         const responseHeaders = details.responseHeaders;
-        responseHeaders["Access-Control-Allow-Origin"] = ["https://localhost:10786"];
+        const urlObj = new URL(details.url);
+        responseHeaders["Access-Control-Allow-Origin"] = ["https://localhost:10786", urlObj.host];
         callback({ responseHeaders: responseHeaders });
       },
     );
