@@ -94,11 +94,12 @@ export class ViewPi {
     this.webContents.session.webRequest.onHeadersReceived(
       (details, callback) => {
         const responseHeaders = details.responseHeaders;
-        const urlObj = new URL(details.url);
-        responseHeaders["Access-Control-Allow-Origin"] = ["https://localhost:10786", urlObj.host];
+        if(details.referrer.indexOf('https://localhost:10786')>-1) {
+          responseHeaders["Access-Control-Allow-Origin"] = ["https://localhost:10786"];
+        }
         callback({ responseHeaders: responseHeaders });
       },
-    );
+    )
 
     ipcMain.handle(`get-error-url-${this.id}`, async (e) => {
       return this.errorURL;
