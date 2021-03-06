@@ -56,6 +56,7 @@ applyEntries(appConfig, [
   'history',
   'newtab',
   'bookmarks',
+  'mydesk',
 ]);
 
 if (process.env.ENABLE_EXTENSIONS) {

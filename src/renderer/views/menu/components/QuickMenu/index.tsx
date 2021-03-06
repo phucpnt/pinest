@@ -149,6 +149,11 @@ export const QuickMenu = observer(() => {
             <Icon icon={ICON_SETTINGS} />
             <MenuItemTitle>Settings</MenuItemTitle>
           </MenuItem>
+          <MenuItem onClick={goToWebUIPage('mydesk')}>
+            <Icon icon={ICON_FIRE}></Icon>
+            <MenuItemTitle>Mydesk</MenuItemTitle>
+          </MenuItem>
+          <Line />
           {/* TODO: <MenuItem onClick={goToWebUIPage('extensions')}> */}
           <MenuItem
             onClick={goToURL(

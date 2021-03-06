@@ -1,40 +1,11 @@
-import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-
-import { SettingsSection } from '../../store';
-import { Appearance } from '../Appearance';
-import { AddressBar, ManageSearchEngines } from '../AddressBar';
-import { Privacy } from '../Privacy';
-import store from '../../store';
-import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
-import { Button } from '~/renderer/components/Button';
+import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { Autofill } from '../Autofill';
-import { OnStartup } from '../Startup';
-import { Content, LeftContent, Container } from '~/renderer/components/Pages';
-import { ProfileNavigationDrawer } from '../profile-drawer';
-import { Downloads } from '../Downloads';
-import {
-  ICON_PALETTE,
-  ICON_AUTOFILL,
-  ICON_POWER,
-  ICON_SEARCH,
-  ICON_DOWNLOAD,
-  ICON_SHIELD,
-  ICON_TRASH,
-  ICON_EDIT,
-} from '~/renderer/constants';
-import {
-  ContextMenuItem,
-  ContextMenu,
-} from '~/renderer/components/ContextMenu';
-import {
-  Dialog,
-  DialogTitle,
-  DialogButtons,
-} from '~/renderer/views/bookmarks/components/App/style';
-import { Textfield } from '~/renderer/components/Textfield';
+import { Button } from '~/renderer/components/Button';
+import { Container, Content, LeftContent } from '~/renderer/components/Pages';
 import { WebUIStyle } from '~/renderer/mixins/default-styles';
+import store from '../../store';
+import { ProfileNavigationDrawer } from '../profile-drawer';
 
 export const NormalButton = ({
   children,
@@ -57,31 +28,6 @@ export const NormalButton = ({
     </Button>
   );
 };
-
-const MenuItem = observer(
-  ({
-    section,
-    subSections,
-    children,
-    icon,
-  }: {
-    section: SettingsSection;
-    subSections?: SettingsSection[];
-    children: any;
-    icon?: string;
-  }) => (
-    <NavigationDrawer.Item
-      onClick={() => (store.selectedSection = section)}
-      selected={
-        store.selectedSection === section ||
-        (subSections && subSections.includes(store.selectedSection))
-      }
-      icon={icon}
-    >
-      {children}
-    </NavigationDrawer.Item>
-  ),
-);
 
 const onBlur = () => {
   store.menuVisible = false;
@@ -160,119 +106,9 @@ export default observer(() => {
       >
         <WebUIStyle />
         <ProfileNavigationDrawer></ProfileNavigationDrawer>
-        <ContextMenu
-          tabIndex={1}
-          ref={store.menuRef}
-          onBlur={onBlur}
-          style={{
-            top: store.menuInfo.top,
-            left: store.menuInfo.left,
-          }}
-          visible={store.menuVisible}
-        >
-          {store.editedSearchEngine &&
-            store.editedSearchEngine.keyword !== store.searchEngine.keyword && (
-              <>
-                <ContextMenuItem onClick={onMakeDefaultClick} icon=" ">
-                  Make default
-                </ContextMenuItem>
-                <ContextMenuItem onClick={onRemoveClick} icon={ICON_TRASH}>
-                  Remove
-                </ContextMenuItem>
-              </>
-            )}
-          {store.editedSearchEngine && (
-            <ContextMenuItem onClick={onEditClick} icon={ICON_EDIT}>
-              Edit
-            </ContextMenuItem>
-          )}
-        </ContextMenu>
-        <Dialog
-          onMouseDown={(e) => e.stopPropagation()}
-          visible={store.dialogVisible}
-          ref={store.dialogRef}
-          style={{ width: 350 }}
-        >
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          <Textfield
-            style={{ width: '100%' }}
-            dark={store.theme['dialog.lightForeground']}
-            ref={store.searchEngineInputRef}
-            label="Search engine"
-          ></Textfield>
-
-          <Textfield
-            style={{
-              width: '100%',
-              marginTop: 16,
-            }}
-            dark={store.theme['dialog.lightForeground']}
-            ref={store.searchEngineKeywordInputRef}
-            label="Keyword"
-          ></Textfield>
-
-          <Textfield
-            style={{
-              width: '100%',
-              marginTop: 16,
-            }}
-            dark={store.theme['dialog.lightForeground']}
-            ref={store.searchEngineUrlInputRef}
-            label="URL with %s in place of query"
-          ></Textfield>
-
-          <DialogButtons>
-            <NormalButton onClick={() => (store.dialogVisible = false)}>
-              Cancel
-            </NormalButton>
-            <Button onClick={onSaveClick} style={{ marginLeft: 8 }}>
-              Save
-            </Button>
-          </DialogButtons>
-          <div style={{ clear: 'both' }}></div>
-        </Dialog>
-        <NavigationDrawer title="Settings" search>
-          <MenuItem icon={ICON_PALETTE} section="appearance">
-            Appearance
-          </MenuItem>
-          {process.env.ENABLE_AUTOFILL && (
-            <MenuItem icon={ICON_AUTOFILL} section="autofill">
-              Autofill
-            </MenuItem>
-          )}
-          <MenuItem icon={ICON_POWER} section="startup">
-            On startup
-          </MenuItem>
-          <MenuItem
-            icon={ICON_SEARCH}
-            section="address-bar"
-            subSections={['search-engines']}
-          >
-            Address bar
-          </MenuItem>
-          <MenuItem icon={ICON_DOWNLOAD} section="downloads">
-            Downloads
-          </MenuItem>
-          <MenuItem icon={ICON_SHIELD} section="privacy">
-            Privacy
-          </MenuItem>
-          {/* <MenuItem section="permissions">Site permissions</MenuItem> */}
-
-          {/* <MenuItem section="language">Languages</MenuItem> */}
-          {/* <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem> */}
-          {/* <MenuItem section="system">System</MenuItem> */}
-        </NavigationDrawer>
         <Content>
-          <LeftContent style={{ maxWidth: 800, marginTop: 56 }}>
-            {selectedSection === 'appearance' && <Appearance />}
-            {selectedSection === 'autofill' && process.env.ENABLE_AUTOFILL && (
-              <Autofill />
-            )}
-            {selectedSection === 'address-bar' && <AddressBar />}
-            {selectedSection === 'search-engines' && <ManageSearchEngines />}
-            {selectedSection === 'startup' && <OnStartup />}
-            {selectedSection === 'privacy' && <Privacy />}
-            {selectedSection === 'downloads' && <Downloads />}
+          <LeftContent style={{ marginLeft: 18, marginTop: 18 }}>
+            <h1>Hello</h1>
           </LeftContent>
         </Content>
       </Container>

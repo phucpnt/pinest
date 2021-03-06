@@ -33,7 +33,7 @@ const MenuItem = observer(
 export const ProfileNavigationDrawer = () => {
   return (
     <NavigationDrawer dense title="">
-      <MenuItem name="profile" icon={ICON_SETTINGS}>
+      <MenuItem name="mydesk" icon={ICON_SETTINGS}>
         Profile
       </MenuItem>
       <MenuItem name="history" icon={ICON_HISTORY}>
